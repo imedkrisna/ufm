@@ -1,0 +1,164 @@
+<!-- preamble start -->
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_km51im13j5hc31wdcyqc</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+<!-- preamble end -->
+
+    <script>
+
+      function styleCell_km51im13j5hc31wdcyqc(i, j, css_id) {
+          var table = document.getElementById("tinytable_km51im13j5hc31wdcyqc");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_km51im13j5hc31wdcyqc');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_km51im13j5hc31wdcyqc(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_km51im13j5hc31wdcyqc");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 4, j: 1 }, { i: 1, j: 3 }, { i: 7, j: 1 }, { i: 3, j: 3 }, { i: 1, j: 1 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 5, j: 2 }, { i: 5, j: 3 }, { i: 7, j: 2 }, { i: 7, j: 3 }, { i: 5, j: 1 }, { i: 2, j: 3 }, { i: 4, j: 3 },  ], css_id: 'tinytable_css_vk6j4swmie3m52vono5t',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_llcwnfla81a71z2qik49',}, 
+          { positions: [ { i: 8, j: 2 }, { i: 8, j: 1 }, { i: 8, j: 3 },  ], css_id: 'tinytable_css_ji8tf3d3cilkdaclwyok',}, 
+          { positions: [ { i: 6, j: 2 }, { i: 6, j: 1 }, { i: 6, j: 3 },  ], css_id: 'tinytable_css_gu05ivqq53y8r650n0te',}, 
+          { positions: [ { i: 6, j: 0 },  ], css_id: 'tinytable_css_gn3m76cpunier922dxfz',}, 
+          { positions: [ { i: 8, j: 0 },  ], css_id: 'tinytable_css_d9vgp9xr8h0h26e39z6v',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 7, j: 0 },  ], css_id: 'tinytable_css_ab269km0lkh7isfefeps',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 3 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_3gybxapkekutz44wkrj8',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_km51im13j5hc31wdcyqc(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_vk6j4swmie3m52vono5t, .table th.tinytable_css_vk6j4swmie3m52vono5t { text-align: center; }
+      .table td.tinytable_css_llcwnfla81a71z2qik49, .table th.tinytable_css_llcwnfla81a71z2qik49 { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_ji8tf3d3cilkdaclwyok, .table th.tinytable_css_ji8tf3d3cilkdaclwyok { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_gu05ivqq53y8r650n0te, .table th.tinytable_css_gu05ivqq53y8r650n0te { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_gn3m76cpunier922dxfz, .table th.tinytable_css_gn3m76cpunier922dxfz { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_d9vgp9xr8h0h26e39z6v, .table th.tinytable_css_d9vgp9xr8h0h26e39z6v { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_ab269km0lkh7isfefeps, .table th.tinytable_css_ab269km0lkh7isfefeps { text-align: left; }
+      .table td.tinytable_css_3gybxapkekutz44wkrj8, .table th.tinytable_css_3gybxapkekutz44wkrj8 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_km51im13j5hc31wdcyqc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">OLS</th>
+                <th scope="col">Log OLS</th>
+                <th scope="col">POLS</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='4'>+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>−29709743.435</td>
+                  <td>17.498***</td>
+                  <td>18.057***</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(19507779.308)</td>
+                  <td>(0.087)</td>
+                  <td>(0.000)</td>
+                </tr>
+                <tr>
+                  <td>IDSD_FINANCIAL</td>
+                  <td>104128173.282***</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(12069814.932)</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>LIDSD_FINANCIAL</td>
+                  <td></td>
+                  <td>1.230***</td>
+                  <td>1.290***</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>(0.115)</td>
+                  <td>(0.000)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.</td>
+                  <td>199</td>
+                  <td>199</td>
+                  <td>199</td>
+                </tr>
+                <tr>
+                  <td>R2</td>
+                  <td>0.274</td>
+                  <td>0.366</td>
+                  <td>0.424</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- postamble start -->
+  </body>
+
+</html>
+<!-- postamble end -->
+<!-- hack to avoid NA insertion in last line -->
