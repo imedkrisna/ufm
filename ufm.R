@@ -82,6 +82,9 @@ dat$one<-dat$SINGLE_IMSE/dat$TOTAL_IMSE*100
 dat$lone<-log(dat$one)
 dat$LUNPAID_WORKER<-log(dat$UNPAID_WORKER)
 dat$LTOTAL_IMSE<-log(dat$TOTAL_IMSE)
+dat$rat<-dat$SINGLE_IMSE/dat$TOTAL_IMSE
+dat$lrat<-log(dat$rat)
+dat$LSINGLE_IMSE<-log(dat$SINGLE_IMSE)
 dat$LWAGES<-log(dat$WAGES)
 dat$LIDSD_INST	<-log(dat$	IDSD_INST		)
 dat$LIDSD_INFRA	<-log(dat$	IDSD_INFRA		)
@@ -111,8 +114,8 @@ d233<-dat|>filter(Year==2023)
 
 #### profit
 
-var<-'profit'
-lvar<-'lprofit'
+var<-'WAGES'
+lvar<-'LWAGES'
 
 tot1<-feols(formula(paste(var,'~IDSD')),d233)
 tot2<-feols(formula(paste(lvar,'~LIDSD')),d233)
