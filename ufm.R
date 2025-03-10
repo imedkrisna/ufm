@@ -4,6 +4,7 @@ library(tidyverse) ## Packages
 library(readxl)
 library(modelsummary)
 library(fixest)
+library(patchwork)
 
 
 dat<-read_excel("data.xlsx",sheet="gabung")|>
@@ -116,18 +117,35 @@ datp$gp<-datp$GRP/datp$pop
 
 ## graph
 
-datp|>ggplot(aes(x=GRP,y=IDSD_INST,color=factor(Year)))+geom_point(size=1.1)+
+plt1<-datp|>ggplot(aes(x=GRP,y=IDSD,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="Gross Regional Product (Billion USD)",y="IDSD")+
   theme_classic()
-ggsave("fig/fig1.png")
+#ggsave("fig/fig1.png")
 
-datp|>ggplot(aes(x=pop,y=IDSD_INST,color=factor(Year)))+geom_point(size=1.1)+
+plt2<-datp|>ggplot(aes(x=pop,y=IDSD,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="Population (1,000)",y="IDSD")+
   theme_classic()
-ggsave("fig/fig2.png")
+#ggsave("fig/fig2.png")
 
-datp|>ggplot(aes(x=gp,y=IDSD_INST,color=factor(Year)))+geom_point(size=1.1)+
+plt3<-datp|>ggplot(aes(x=gp,y=IDSD,color=factor(Year)))+
+  geom_point(size=1.2)+
+  labs(x="Gross Regional Product per capita (Million USD)",y="IDSD")+
   theme_classic()
-ggsave("fig/fig3.png")
+#ggsave("fig/fig3.png")
+plt4<-datp|>ggplot(aes(x=budget,y=IDSD,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="Planned provincial budget (1,000 IDR)",y="IDSD")+
+  theme_classic()
 
+plt<-plt1+plt2+plt3+plt4+plot_layout(guides = 'collect',axis_titles = 'collect')+
+  plot_annotation(title="Figure 1: IDSD and Macro Variables",
+                  caption="Source: Author's calculation based on BPS data")
+ggsave("fig/idsd.png",plt,width=9,height=6)
 ## Regression
 
 #### profit
