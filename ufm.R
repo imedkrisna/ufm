@@ -96,9 +96,6 @@ datasummary(IDSD_INST+IDSD_INFRA+IDSD_ICT+IDSD_MACRO+IDSD_HEALTH+IDSD_SKILLS+IDS
               factor(Year)*(Mean+SD+N+Histogram),
             data=dat,output='tab/idsdsum.docx')
 
-
-
-
 ## Aggregate by province year
 
 datp<-dat|>group_by(Province,Year)|>
@@ -146,7 +143,11 @@ plt<-plt1+plt2+plt3+plt4+plot_layout(guides = 'collect',axis_titles = 'collect')
   plot_annotation(title="Figure 1: IDSD and Macro Variables",
                   caption="Source: Author's calculation based on BPS data")
 ggsave("fig/idsd.png",plt,width=9,height=6)
+
 ## Regression
+
+### TOTAL_IMSE variable of increased no. of UMKM
+### 
 
 #### profit
 
