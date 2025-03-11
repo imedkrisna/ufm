@@ -44,6 +44,11 @@ dat$LIDSD_INNOVATION	<-log(dat$	IDSD_INNOVATION		)
 dat$LIDSD<-log(dat$IDSD)
 
 dat<-dat|>mutate(y23=if_else(Year==2023,1,0))
+dat<-dat|>mutate(j=case_when(Province=="DKI Jakarta"~1,
+                               Province=="Jawa Barat"~1,
+                               Province=="Jawa Tengah"~1,
+                               Province=="Jawa Timur"~1,
+                             .default=0))
 
 
 ## Summary stats of IDSD
@@ -161,9 +166,9 @@ var<-'TOTAL_IMSE'
 lvar<-'LTOTAL_IMSE'
 
 tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
-tot2<-feols(formula(paste(lvar,'~LIDSD+y23|Province')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD|Year+Province')),dat)
 tot3<-fepois(formula(paste(var,'~LIDSD')),dat)
-tot4<-fepois(formula(paste(var,'~LIDSD+y23|Province')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD|Year+Province')),dat)
 
 tot<-list(
   "OLS"=tot1,
@@ -303,3 +308,106 @@ tot<-list(
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.xlsx")
 
+## Province level
+
+datpp<-dat|>group_by(Province,Year)|>
+  summarise_if(is.numeric,sum,na.rm=TRUE)
+datp<-dat|>group_by(Province,Year)|>
+  summarise_if(is.numeric,mean,na.rm=TRUE)
+macro<-read_excel("macro.xlsx",sheet="gp")
+macro$hrpay<-as.numeric(macro$hrpay)
+datp$tot<-datpp$TOTAL_IMSE
+
+datp<-datp|>full_join(macro,by=c("Province","Year"))
+
+datp<-datp|>mutate(case_when(Province=="DKI Jakarta"~1,
+                               Province=="Jawa Barat"~1,
+                               Province=="Jawa Tengah"~1,
+                               Province=="Jawa Timur"~1,
+                               Province=="Banten"~1,
+                               .default=0))
+datp$gp<-datp$GRP/datp$pop
+datp$lpop<-log(datp$pop)
+datp$lGRP<-log(datp$GRP)
+datp$lgp<-log(datp$gp)
+datp$lhrpay<-log(datp$hrpay)
+datp$ltot<-log(datp$tot)
+datp$lbudget<-log(datp$budget)
+
+datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
+                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay)
+datp<-datp|>filter(tot>0)
+
+##### tot
+
+var<-'tot'
+lvar<-'ltot'
+
+tot1<-feols(formula(paste(lvar,'~LIDSD+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
+tot2<-feols(formula(paste(lvar,'~LIDSD+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
+tot3<-fepois(formula(paste(var,'~LIDSD+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
+tot4<-fepois(formula(paste(var,'~LIDSD+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.xlsx")
+
+##### TOTAL IMSE informal id
+
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/tot.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/tot.xlsx")
+
+##### hrpay
+
+var<-'hrpay'
+lvar<-'lhrpay'
+
+tot1<-feols(formula(paste(lvar,'~LIDSD+lGRP+lpop+lgp+lbudget+ltot')),datp)
+tot2<-feols(formula(paste(lvar,'~LIDSD+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
+tot3<-fepois(formula(paste(var,'~LIDSD+lGRP+lpop+lgp+lbudget+ltot')),datp)
+tot4<-fepois(formula(paste(var,'~LIDSD+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hridsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hridsd.xlsx")
+
+##### TOTAL IMSE informal id
+
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hr.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hr.xlsx")
