@@ -27,6 +27,7 @@ dat$LTOTAL_IMSE<-log(dat$TOTAL_IMSE)
 dat$rat<-dat$SINGLE_IMSE/dat$TOTAL_IMSE
 dat$lrat<-log(dat$rat)
 dat$LSINGLE_IMSE<-log(dat$SINGLE_IMSE)
+dat$LINFORMAL<-log(dat$INFORMAL)
 dat$LWAGES<-log(dat$WAGES)
 dat$LIDSD_INST	<-log(dat$	IDSD_INST		)
 dat$LIDSD_INFRA	<-log(dat$	IDSD_INFRA		)
@@ -41,6 +42,9 @@ dat$LIDSD_MARKET	<-log(dat$	IDSD_MARKET		)
 dat$LIDSD_BUSINESS	<-log(dat$	IDSD_BUSINESS		)
 dat$LIDSD_INNOVATION	<-log(dat$	IDSD_INNOVATION		)
 dat$LIDSD<-log(dat$IDSD)
+
+dat<-dat|>mutate(y23=if_else(Year==2023,1,0))
+
 
 ## Summary stats of IDSD
 
@@ -145,72 +149,157 @@ plt<-plt1+plt2+plt3+plt4+plot_layout(guides = 'collect',axis_titles = 'collect')
 ggsave("fig/idsd.png",plt,width=9,height=6)
 
 ## Regression
-
-### TOTAL_IMSE variable of increased no. of UMKM
-### 
-
+### Kab/Kota level
+#### TOTAL_IMSE variable of increased no. of UMKM, reflects "success"
+#### INFORMAL 
+#### WAGES
 #### profit
+
+##### TOTAL IMSE IDSD
+
+var<-'TOTAL_IMSE'
+lvar<-'LTOTAL_IMSE'
+
+tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD+y23|Province')),dat)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totalidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totalidsd.xlsx")
+
+##### TOTAL IMSE IDSD id
+
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.xlsx")
+
+##### INFORMAL
+
+var<-'INFORMAL'
+lvar<-'LINFORMAL'
+
+tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD+y23|Province')),dat)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informalidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informalidsd.xlsx")
+
+##### TOTAL IMSE informal id
+
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informal.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informal.xlsx")
+
+##### wages
 
 var<-'WAGES'
 lvar<-'LWAGES'
 
-tot1<-feols(formula(paste(var,'~IDSD')),d233)
-tot2<-feols(formula(paste(lvar,'~LIDSD')),d233)
-tot3<-fepois(formula(paste(var,'~LIDSD')),d233)
+tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD+y23|Province')),dat)
 
 tot<-list(
   "OLS"=tot1,
-  "Log OLS"=tot2,
-  "POLS"=tot3
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
 )
 
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wagesidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wagesidsd.xlsx")
 
+##### TOTAL IMSE wages id
 
-tot1<-feols(formula(paste(var,'~IDSD_INST')),d233)
-tot2<-feols(formula(paste(lvar,'~LIDSD_INST')),d233)
-tot3<-fepois(formula(paste(var,'~LIDSD_INST')),d233)
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
 
 tot<-list(
   "OLS"=tot1,
-  "Log OLS"=tot2,
-  "POLS"=tot3
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
 )
 
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inst.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wages.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wages.xlsx")
 
-tot1<-feols(formula(paste(var,'~IDSD_BUSINESS')),d233)
-tot2<-feols(formula(paste(lvar,'~LIDSD_BUSINESS')),d233)
-tot3<-fepois(formula(paste(var,'~LIDSD_BUSINESS')),d233)
+##### PROFIT
+
+var<-'profit'
+lvar<-'lprofit'
+
+tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD+y23|Province')),dat)
 
 tot<-list(
   "OLS"=tot1,
-  "Log OLS"=tot2,
-  "POLS"=tot3
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
 )
 
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/bis.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profitidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profitidsd.xlsx")
 
-tot1<-feols(formula(paste(var,'~IDSD_LABOUR')),d233)
-tot2<-feols(formula(paste(lvar,'~LIDSD_LABOUR')),d233)
-tot3<-fepois(formula(paste(var,'~LIDSD_LABOUR')),d233)
+##### TOTAL IMSE informal id
+
+tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
+tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS')),dat)
+tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+y23|Province')),dat)
 
 tot<-list(
   "OLS"=tot1,
-  "Log OLS"=tot2,
-  "POLS"=tot3
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
 )
 
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/labor.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.xlsx")
 
-tot1<-feols(formula(paste(var,'~IDSD_FINANCIAL')),d233)
-tot2<-feols(formula(paste(lvar,'~LIDSD_FINANCIAL')),d233)
-tot3<-fepois(formula(paste(var,'~LIDSD_FINANCIAL')),d233)
-
-tot<-list(
-  "OLS"=tot1,
-  "Log OLS"=tot2,
-  "POLS"=tot3
-)
-
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/fin.html")

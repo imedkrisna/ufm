@@ -1,0 +1,180 @@
+<!-- preamble start -->
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_vb6l9ts124uccezzbid5</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+<!-- preamble end -->
+
+    <script>
+
+      function styleCell_vb6l9ts124uccezzbid5(i, j, css_id) {
+          var table = document.getElementById("tinytable_vb6l9ts124uccezzbid5");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_vb6l9ts124uccezzbid5');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_vb6l9ts124uccezzbid5(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_vb6l9ts124uccezzbid5");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_jdamnngk57l264lehdob',}, 
+          { positions: [ { i: 6, j: 2 }, { i: 6, j: 1 }, { i: 6, j: 4 }, { i: 6, j: 3 },  ], css_id: 'tinytable_css_j532y4cood80g0hlsktm',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 },  ], css_id: 'tinytable_css_brdqcu5mdhq1kseets3b',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 }, { i: 0, j: 3 }, { i: 0, j: 4 },  ], css_id: 'tinytable_css_ak73dihkzguw9ba8eq6d',}, 
+          { positions: [ { i: 9, j: 0 },  ], css_id: 'tinytable_css_7fav4gek9jheo4klw528',}, 
+          { positions: [ { i: 9, j: 1 }, { i: 9, j: 2 }, { i: 9, j: 3 }, { i: 9, j: 4 },  ], css_id: 'tinytable_css_5ib0njdusiqfpi2k4o4e',}, 
+          { positions: [ { i: 1, j: 1 }, { i: 5, j: 1 }, { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 8, j: 1 }, { i: 2, j: 3 }, { i: 2, j: 4 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 5, j: 2 }, { i: 7, j: 1 }, { i: 4, j: 1 }, { i: 8, j: 2 }, { i: 3, j: 3 }, { i: 4, j: 3 }, { i: 1, j: 3 }, { i: 5, j: 4 }, { i: 7, j: 3 }, { i: 8, j: 3 }, { i: 5, j: 3 }, { i: 7, j: 2 }, { i: 1, j: 4 }, { i: 3, j: 4 }, { i: 4, j: 4 }, { i: 7, j: 4 }, { i: 8, j: 4 },  ], css_id: 'tinytable_css_1daom78qik0u2mv5mjsn',}, 
+          { positions: [ { i: 6, j: 0 },  ], css_id: 'tinytable_css_0lynngpc20jbte8ylb81',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_vb6l9ts124uccezzbid5(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_jdamnngk57l264lehdob, .table th.tinytable_css_jdamnngk57l264lehdob { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_j532y4cood80g0hlsktm, .table th.tinytable_css_j532y4cood80g0hlsktm { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_brdqcu5mdhq1kseets3b, .table th.tinytable_css_brdqcu5mdhq1kseets3b { text-align: left; }
+      .table td.tinytable_css_ak73dihkzguw9ba8eq6d, .table th.tinytable_css_ak73dihkzguw9ba8eq6d { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_7fav4gek9jheo4klw528, .table th.tinytable_css_7fav4gek9jheo4klw528 { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_5ib0njdusiqfpi2k4o4e, .table th.tinytable_css_5ib0njdusiqfpi2k4o4e { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_1daom78qik0u2mv5mjsn, .table th.tinytable_css_1daom78qik0u2mv5mjsn { text-align: center; }
+      .table td.tinytable_css_0lynngpc20jbte8ylb81, .table th.tinytable_css_0lynngpc20jbte8ylb81 { text-align: left; border-bottom: solid black 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_vb6l9ts124uccezzbid5" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">OLS</th>
+                <th scope="col">FE OLS</th>
+                <th scope="col">POLS</th>
+                <th scope="col">FE POLS</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='5'>+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>4.402***</td>
+                  <td></td>
+                  <td>6.288***</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.357)</td>
+                  <td></td>
+                  <td>(0.003)</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>LIDSD</td>
+                  <td>3.736***</td>
+                  <td>1.250*</td>
+                  <td>2.566***</td>
+                  <td>−0.880</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.328)</td>
+                  <td>(0.592)</td>
+                  <td>(0.003)</td>
+                  <td>(0.659)</td>
+                </tr>
+                <tr>
+                  <td>y23</td>
+                  <td></td>
+                  <td>0.042</td>
+                  <td></td>
+                  <td>0.098**</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>(0.056)</td>
+                  <td></td>
+                  <td>(0.036)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.</td>
+                  <td>594</td>
+                  <td>594</td>
+                  <td>605</td>
+                  <td>605</td>
+                </tr>
+                <tr>
+                  <td>R2</td>
+                  <td>0.180</td>
+                  <td>0.591</td>
+                  <td>0.110</td>
+                  <td>0.659</td>
+                </tr>
+                <tr>
+                  <td>R2 Within</td>
+                  <td></td>
+                  <td>0.032</td>
+                  <td></td>
+                  <td>0.016</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- postamble start -->
+  </body>
+
+</html>
+<!-- postamble end -->
+<!-- hack to avoid NA insertion in last line -->
