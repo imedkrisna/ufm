@@ -326,6 +326,8 @@ datp<-datp|>mutate(case_when(Province=="DKI Jakarta"~1,
                                Province=="Jawa Timur"~1,
                                Province=="Banten"~1,
                                .default=0))
+
+
 datp$gp<-datp$GRP/datp$pop
 datp$lpop<-log(datp$pop)
 datp$lGRP<-log(datp$GRP)
@@ -335,8 +337,23 @@ datp$ltot<-log(datp$tot)
 datp$lbudget<-log(datp$budget)
 
 datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
-                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay)
+                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,
+                   profit)
+
+datp$lprofit<-log(datp$profit)
+
 datp<-datp|>filter(tot>0)
+
+## Plot
+
+datp|>ggplot(aes(x=lprofit,y=lhrpay,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  scale_y_continuous(labels = scales::comma)+
+  labs(x="log MSME profit",y="log hourly pay")+
+  theme_classic()
+ggsave("fig/prowage.png")
+
 
 ##### tot
 
