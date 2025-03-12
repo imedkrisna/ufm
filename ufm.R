@@ -17,7 +17,9 @@ summary(dat$missing)
 ## generate some stuff
 
 dat$profit<-dat$REVENUE-dat$EXPENDITURE
+dat$hrpro<-dat$profit/2080
 dat$lprofit<-log(dat$profit)
+dat$hrpro<-log(dat$hrpro)
 dat$LREVENUE<-log(dat$REVENUE)
 dat$LEXPENDITURE<-log(dat$EXPENDITURE)
 dat$one<-dat$SINGLE_IMSE/dat$TOTAL_IMSE*100
@@ -309,7 +311,7 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.ht
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.xlsx")
 
 ## Province level
-
+dat$hrpro<-dat$profit/2080
 datpp<-dat|>group_by(Province,Year)|>
   summarise_if(is.numeric,sum,na.rm=TRUE)
 datp<-dat|>group_by(Province,Year)|>
@@ -336,12 +338,13 @@ datp$lhrpay<-log(datp$hrpay)
 datp$ltot<-log(datp$tot)
 datp$lbudget<-log(datp$budget)
 
+
 datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
                    LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,
-                   profit)
+                   profit,hrpro,INFORMAL)
 
 datp$lprofit<-log(datp$profit)
-
+datp$lhrpro<-log(datp$hrpro)
 datp<-datp|>filter(tot>0)
 
 ## Plot
@@ -352,7 +355,23 @@ datp|>ggplot(aes(x=lprofit,y=lhrpay,color=factor(Year)))+
   scale_y_continuous(labels = scales::comma)+
   labs(x="log MSME profit",y="log hourly pay")+
   theme_classic()
-ggsave("fig/prowage.png")
+ggsave("fig/prowage.png",width=9,height=6)
+
+datp|>ggplot(aes(x=lhrpro,y=lhrpay,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  scale_y_continuous(labels = scales::comma)+
+  labs(x="log MSME profit",y="log hourly pay")+
+  theme_classic()
+ggsave("fig/lhrprowage.png",width=9,height=6)
+
+datp|>ggplot(aes(x=hrpro,y=hrpay,color=factor(Year)))+
+  geom_point(size=1.2)+
+  scale_x_continuous(labels = scales::comma)+
+  scale_y_continuous(labels = scales::comma)+
+  labs(x="log MSME profit",y="log hourly pay")+
+  theme_classic()
+ggsave("fig/hrprowage.png",width=9,height=6)
 
 
 ##### tot
