@@ -321,6 +321,9 @@ datp<-dat|>group_by(Province,Year)|>
 macro<-read_excel("macro.xlsx",sheet="gp")
 macro$hrpay<-as.numeric(macro$hrpay)
 datp$tot<-datpp$TOTAL_IMSE
+datp$info<-datpp$INFORMAL
+datp$sinf<-datp$info/datp$tot
+
 
 datp<-datp|>full_join(macro,by=c("Province","Year"))
 
@@ -339,15 +342,27 @@ datp$lgp<-log(datp$gp)
 datp$lhrpay<-log(datp$hrpay)
 datp$ltot<-log(datp$tot)
 datp$lbudget<-log(datp$budget)
-
+datp$lsinf<-log(datp$sinf)
 
 datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
+                   IDSD,IDSD_INST,IDSD_LABOUR,IDSD_BUSINESS,pop,GRP,sinf,lsinf,
                    LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,
                    profit,hrpro,INFORMAL,worker,umkm)
 
 datp$lprofit<-log(datp$profit)
 datp$lhrpro<-log(datp$hrpro)
+datp$share<-log(datp$hrpro)
 datp<-datp|>filter(tot>0)
+
+
+datp$gap<-datp$worker-datp$umkm
+datp$lgap<-log(datp$gap)
+
+datasummary(IDSD_INST+IDSD_LABOUR+IDSD_BUSINESS+gap+tot+GRP+pop+
+              profit+hrpay+INFORMAL+worker+umkm~
+              factor(Year)*(Mean+SD+N+Histogram),
+            data=datp,output='tab/province.docx')
+
 
 ## Plot
 
@@ -385,8 +400,6 @@ ggsave("fig/worker.png",width=9,height=6)
 
 ##### tot
 
-datp$gap<-datp$worker-datp$umkm
-datp$lgap<-log(datp$gap)
 
 var<-'tot'
 lvar<-'ltot'
@@ -407,6 +420,9 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.h
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.xlsx")
 
 ##### TOTAL IMSE informal id
+
+var<-'sinf'
+lvar<-'lsinf'
 
 tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
 tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
@@ -445,6 +461,9 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hridsd.xl
 
 ##### TOTAL IMSE informal id
 
+var<-'sinf'
+lvar<-'lsinf'
+
 tot1<-feols(formula(paste(lvar,' ~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
 tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
 tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
@@ -457,8 +476,8 @@ tot<-list(
   "FE POLS"=tot4
 )
 
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hr.html")
-modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hr.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.xlsx")
 
 ##### gap
 
