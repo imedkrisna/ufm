@@ -200,11 +200,14 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.docx")
 
 ##### INFORMAL
 
-var<-'INFORMAL'
-lvar<-'LINFORMAL'
+dat$info<-dat$INFORMAL/dat$TOTAL_IMSE
+dat$linfo<-log(dat$info)
+var<-'info'
+lvar<-'linfo'
 
 tot1<-feols(formula(paste(lvar,'~LIDSD')),dat)
 tot2<-feols(formula(paste(lvar,'~LIDSD|Province+Year')),dat)
@@ -220,6 +223,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informalidsd.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informalidsd.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informalidsd.docx")
 
 ##### TOTAL IMSE informal id
 
@@ -237,6 +241,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informal.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informal.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/informal.docx")
 
 ##### wages
 
@@ -274,6 +279,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wages.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wages.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/wages.docx")
 
 ##### PROFIT
 
@@ -295,7 +301,12 @@ tot<-list(
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profitidsd.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profitidsd.xlsx")
 
-##### TOTAL IMSE informal id
+##### TOTAL IMSE profit id
+
+dat$informal<-dat$INFORMAL/dat$TOTAL_IMSE
+dat$linformal<-log(dat$informal)
+var<-'profit'
+lvar<-'lprofit'
 
 tot1<-feols(formula(paste(lvar,invar)),dat)
 tot2<-feols(formula(paste(lvar,invar,'|Year+Province')),dat)
@@ -311,6 +322,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/profit.docx")
 
 ## Province level
 dat$hrpro<-dat$profit/2080
@@ -438,6 +450,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/tot.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/tot.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/tot.docx")
 
 ##### hrpay
 
@@ -478,6 +491,7 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.docx")
 
 ##### gap
 
@@ -515,3 +529,4 @@ tot<-list(
 
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/gap.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/gap.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/gap.docx")
