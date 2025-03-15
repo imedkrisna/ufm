@@ -204,7 +204,7 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.doc
 
 ##### INFORMAL
 
-dat$info<-dat$INFORMAL/dat$TOTAL_IMSE
+dat$info<-dat$INFORMAL
 dat$linfo<-log(dat$info)
 var<-'info'
 lvar<-'linfo'
@@ -355,10 +355,12 @@ datp$lhrpay<-log(datp$hrpay)
 datp$ltot<-log(datp$tot)
 datp$lbudget<-log(datp$budget)
 datp$lsinf<-log(datp$sinf)
+datp$linfo<-log(datp$linfo)
 
-datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
+
+datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,info,
                    IDSD,IDSD_INST,IDSD_LABOUR,IDSD_BUSINESS,pop,GRP,sinf,lsinf,
-                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,
+                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,linfo,
                    profit,hrpro,INFORMAL,worker,umkm)
 
 datp$lprofit<-log(datp$profit)
@@ -433,8 +435,10 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.x
 
 ##### TOTAL IMSE informal id
 
-var<-'sinf'
-lvar<-'lsinf'
+#var<-'sinf'
+#lvar<-'lsinf'
+var<-'info'
+lvar<-'linfo'
 
 tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
 tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
@@ -474,8 +478,10 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/hridsd.xl
 
 ##### TOTAL IMSE informal id
 
-var<-'sinf'
-lvar<-'lsinf'
+#var<-'sinf'
+#lvar<-'lsinf'
+var<-'info'
+lvar<-'linfo'
 
 tot1<-feols(formula(paste(lvar,' ~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
 tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
