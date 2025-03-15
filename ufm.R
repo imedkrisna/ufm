@@ -29,6 +29,8 @@ dat$LTOTAL_IMSE<-log(dat$TOTAL_IMSE)
 dat$rat<-dat$SINGLE_IMSE/dat$TOTAL_IMSE
 dat$lrat<-log(dat$rat)
 dat$LSINGLE_IMSE<-log(dat$SINGLE_IMSE)
+dat$info<-dat$INFORMAL/dat$TOTAL_IMSE
+dat$linfo<-log(dat$info)
 dat$LINFORMAL<-log(dat$INFORMAL)
 dat$LWAGES<-log(dat$WAGES)
 dat$LIDSD_INST	<-log(dat$	IDSD_INST		)
@@ -155,6 +157,38 @@ plt<-plt1+plt2+plt3+plt4+plot_layout(guides = 'collect',axis_titles = 'collect')
                   caption="Source: Author's calculation based on BPS data")
 ggsave("fig/idsd.png",plt,width=9,height=6)
 
+## Histogram
+
+hist1<-dat|>ggplot(aes(TOTAL_IMSE,fill=factor(Year)))+
+  geom_histogram()+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="Total number of IMSE")+
+  theme_classic()
+#ggsave("fig/fig1.png")
+
+hist2<-dat|>ggplot(aes(INFORMAL,fill=factor(Year)))+
+  geom_histogram()+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="Total number of informal IMSE")+
+  theme_classic()
+#ggsave("fig/fig2.png")
+
+hist3<-dat|>ggplot(aes(WAGES/1e6,fill=factor(Year)))+
+  geom_histogram()+
+  labs(x="average annual wages (million IDR)")+
+  theme_classic()
+#ggsave("fig/fig3.png")
+hist4<-dat|>ggplot(aes(profit/1e6,fill=factor(Year)))+
+  geom_histogram()+
+  scale_x_continuous(labels = scales::comma)+
+  labs(x="average annual profit (million IDR)")+
+  theme_classic()
+
+hist<-hist1+hist2+hist3+hist4+plot_layout(guides = 'collect',axis_titles = 'collect')+
+  plot_annotation(title="Figure 2: Distribution of dependent variables",
+                  caption="Source: Author's calculation based on IDSD data")
+ggsave("fig/hist.png",hist,width=9,height=6)
+
 ## Regression
 ### Kab/Kota level
 #### TOTAL_IMSE variable of increased no. of UMKM, reflects "success"
@@ -164,8 +198,8 @@ ggsave("fig/idsd.png",plt,width=9,height=6)
 
 ##### TOTAL IMSE IDSD
 #invar<-'~LIDSD_INST+LIDSD_INFRA+LIDSD_ICT+LIDSD_MACRO+LIDSD_HEALTH+LIDSD_SKILLS+LIDSD_PRODUCT+LIDSD_LABOUR+LIDSD_FINANCIAL+LIDSD_MARKET+LIDSD_BUSINESS+LIDSD_INNOVATION'
-#invar<-'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+LIDSD_MARKET'
-invar<-'~LIDSD_INST+LIDSD_INFRA+LIDSD_ICT+LIDSD_SKILLS+LIDSD_LABOUR+LIDSD_MARKET+LIDSD_BUSINESS+LIDSD_INNOVATION'
+invar<-'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+LIDSD_MARKET'
+#invar<-'~LIDSD_INST+LIDSD_INFRA+LIDSD_ICT+LIDSD_SKILLS+LIDSD_LABOUR+LIDSD_MARKET+LIDSD_BUSINESS+LIDSD_INNOVATION'
 var<-'TOTAL_IMSE'
 lvar<-'LTOTAL_IMSE'
 
@@ -204,8 +238,8 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.doc
 
 ##### INFORMAL
 
-dat$info<-dat$INFORMAL/dat$TOTAL_IMSE
-dat$linfo<-log(dat$info)
+dat$info<-dat$INFORMAL
+dat$linfo<-log(dat$INFORMAL)
 var<-'info'
 lvar<-'linfo'
 
