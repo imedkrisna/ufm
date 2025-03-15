@@ -358,7 +358,9 @@ datp$lsinf<-log(datp$sinf)
 
 datp<-datp|>select(Year,Province,lpop,lGRP,lgp,lhrpay,lbudget,ltot,tot,j,
                    IDSD,IDSD_INST,IDSD_LABOUR,IDSD_BUSINESS,pop,GRP,sinf,lsinf,
-                   LIDSD,LIDSD_INST,LIDSD_LABOUR,LIDSD_BUSINESS,hrpay,
+                   LIDSD,LIDSD_INST,LIDSD_ICT,LIDSD_INFRA,LIDSD_INNOVATION,
+                   LIDSD_FINANCIAL,LIDSD_MARKET,LIDSD_LABOUR,LIDSD_BUSINESS,
+                   LIDSD_HEALTH,LIDSD_MACRO,LIDSD_PRODUCT,LIDSD_SKILLS,hrpay,
                    profit,hrpro,INFORMAL,worker,umkm)
 
 datp$lprofit<-log(datp$profit)
@@ -411,7 +413,7 @@ datp|>ggplot(aes(x=umkm,y=worker,color=factor(Year)))+
 ggsave("fig/worker.png",width=9,height=6)
 
 ##### tot
-
+invar<-'~LIDSD_INST+LIDSD_INFRA+LIDSD_ICT+LIDSD_SKILLS+LIDSD_LABOUR+LIDSD_MARKET+LIDSD_BUSINESS+LIDSD_INNOVATION+lGRP+lpop+lbudget'
 
 var<-'tot'
 lvar<-'ltot'
@@ -431,15 +433,11 @@ tot<-list(
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/totidsd.xlsx")
 
-##### TOTAL IMSE informal id
 
-var<-'sinf'
-lvar<-'lsinf'
-
-tot1<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
-tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
-tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay')),datp)
-tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+lhrpay|Year+j')),datp)
+tot1<-feols(formula(paste(lvar,invar)),datp)
+tot2<-feols(formula(paste(lvar,invar,'|Year+j')),datp)
+tot3<-fepois(formula(paste(var,invar)),datp)
+tot4<-fepois(formula(paste(var,invar,'|Year+j')),datp)
 
 tot<-list(
   "OLS"=tot1,
@@ -489,9 +487,31 @@ tot<-list(
   "FE POLS"=tot4
 )
 
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/infidsd.html")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/infidsd.xlsx")
+modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/infidsd.docx")
+
+##### TOTAL IMSE informal id
+
+var<-'sinf'
+lvar<-'lsinf'
+
+tot1<-feols(formula(paste(lvar,invar)),datp)
+tot2<-feols(formula(paste(lvar,invar,'|Year+j')),datp)
+tot3<-fepois(formula(paste(var,invar)),datp)
+tot4<-fepois(formula(paste(var,invar,'|Year+j')),datp)
+
+tot<-list(
+  "OLS"=tot1,
+  "FE OLS"=tot2,
+  "POLS"=tot3,
+  "FE POLS"=tot4
+)
+
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.html")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.xlsx")
 modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/inf.docx")
+
 
 ##### gap
 
@@ -515,10 +535,10 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/gapt.xlsx
 
 ##### gapppppp
 
-tot1<-feols(formula(paste(lvar,' ~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
-tot2<-feols(formula(paste(lvar,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
-tot3<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot')),datp)
-tot4<-fepois(formula(paste(var,'~LIDSD_INST+LIDSD_LABOUR+LIDSD_BUSINESS+lGRP+lpop+lgp+lbudget+ltot|Year+j')),datp)
+tot1<-feols(formula(paste(lvar,invar)),datp)
+tot2<-feols(formula(paste(lvar,invar,'+ltot|Year+j')),datp)
+tot3<-fepois(formula(paste(var,invar)),datp)
+tot4<-fepois(formula(paste(var,invar,'+ltot|Year+j')),datp)
 
 tot<-list(
   "OLS"=tot1,
