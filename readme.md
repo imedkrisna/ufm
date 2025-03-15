@@ -18,4 +18,4 @@ Ontowirjo B, Rizal K, Widayanto Y, et al. (2024) Regional Competitiveness Index 
 
 ## Cite our paper
 
-Surianta, A and Krisna Gupta. 2024. The effect of regional institutional quality on entrepreneurial flourishing in decentralized Indonesia. Working paper.
+Surianta, A and Krisna Gupta. 2024. The effect of regional institutional quality on entrepreneurial flourishing in decentralized Indonesia. Working paper. https://doi.org/10.13140/RG.2.2.30153.66408
