@@ -1,6 +1,7 @@
 # From me
 *.zip
 *.dta
+*.pdf
 
 # Prerequisites
 *.d
