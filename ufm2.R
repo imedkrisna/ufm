@@ -239,11 +239,7 @@ modelsummary(tot,stars=T,gof_omit = 'FE|IC|RMSE|Std.|Adj.',output="reg/total.doc
 ##### INFORMAL
 
 dat$info<-dat$INFORMAL
-<<<<<<< HEAD
 dat$linfo<-log(dat$info)
-=======
-dat$linfo<-log(dat$INFORMAL)
->>>>>>> 7d1b2890fbe0dc63eb9a507579a8e1f0a13f0266
 var<-'info'
 lvar<-'linfo'
 
